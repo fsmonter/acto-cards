@@ -15,13 +15,6 @@ class Play extends Model
         'challenges'    => 'array',
     ];
 
-    public static function boot()
-    {
-        parent::boot();
-
-        static::saving(fn ($play) => $play->is_winner = $play->score >= $play->challenge_score);
-    }
-
     /**
      * Create the challenge.
      *
@@ -33,16 +26,18 @@ class Play extends Model
     {
         $challenges = collect($cards)->map(function ($card) {
             return [
-                'player'    => $card,
-                'challenge' => $randomCard = self::figures()->random(),
-                'user_won'  => $card >= $randomCard,
+                'player'     => $card,
+                'challenge'  => $randomCard = self::figures()->random(),
+                'is_winner'  => $card >= $randomCard,
             ];
         });
 
         return $this->fill([
-            'score'             => $challenges->where('user_won', 1)->count(),
-            'challenge_score'   => $challenges->where('user_won', 0)->count(),
+            'score'             => $challenges->where('is_winner', 1)->count(),
+            'challenge_score'   => $challenges->where('is_winner', 0)->count(),
             'challenges'        => $challenges,
+        ])->fill([
+            'is_winner' => $this->score >= $this->challenge_score,
         ]);
     }
 
