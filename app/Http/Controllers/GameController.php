@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Play;
+use App\Models\Game;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class PlayController extends Controller
+class GameController extends Controller
 {
     public function index()
     {
-        $plays = Play::selectRaw('username, count(*) as plays, count(case when is_winner = 1 then 1 end) as games_won')
+        $games = Game::selectRaw('username, count(*) as games, count(case when is_winner = 1 then 1 end) as wins')
                       ->groupBy('username')
+                      ->orderByRaw('wins desc')
                       ->get();
 
         return response()->json([
-            'plays' => $plays,
+            'games' => $games,
         ]);
     }
 
@@ -31,10 +32,10 @@ class PlayController extends Controller
         $request->validate([
             'username'  => 'required|string|max:255',
             'cards'     => 'required|array',
-            'cards.*'   => ['required', Rule::in(Play::figures())],
+            'cards.*'   => ['required', Rule::in(Game::figures())],
         ]);
 
-        $play = Play::make(['username'=> $request->username])->challenge($request->cards);
+        $play = Game::make(['username'=> $request->username])->challenge($request->cards);
 
         return response()->json([
             'results'   => [

@@ -1,10 +1,10 @@
 require('./bootstrap')
 
 import Vue from 'vue'
-import Play from '@/components/Play'
+import Game from '@/components/Game'
 import Leaderboard from '@/components/Leaderboard'
 
 const vm = new Vue({
   el: '#app',
-  components: { Play, Leaderboard },
+  components: { Game, Leaderboard },
 })

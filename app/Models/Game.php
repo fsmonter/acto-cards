@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
-class Play extends Model
+class Game extends Model
 {
     use HasFactory;
 
@@ -17,7 +17,7 @@ class Play extends Model
     ];
 
     const FIGURES = [
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        '1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
     ];
 
     const SPECIAL_FIGURES = [

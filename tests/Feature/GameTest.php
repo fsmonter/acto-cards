@@ -2,19 +2,19 @@
 
 namespace Tests\Feature;
 
-use App\Models\Play;
+use App\Models\Game;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
-class PlayTest extends TestCase
+class GameTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
     public function username_is_required()
     {
-        $response = $this->postJson(route('play'), [
+        $response = $this->postJson(route('games'), [
             'username'  => '',
         ]);
         $response->assertJsonValidationErrors('username');
@@ -25,7 +25,7 @@ class PlayTest extends TestCase
     {
         $cards = [];
 
-        $response = $this->postJson(route('play'), [
+        $response = $this->postJson(route('games'), [
             'cards' => $cards,
         ]);
 
@@ -37,7 +37,7 @@ class PlayTest extends TestCase
     /** @test */
     public function size_of_the_hand_should_be_one_card_min()
     {
-        $response = $this->postJson(route('play'), [
+        $response = $this->postJson(route('games'), [
             'username'  => 'jon',
             'cards'     => ['1'],
         ]);
@@ -50,7 +50,7 @@ class PlayTest extends TestCase
     {
         $cards = ['1', '12', '13', '-1', 'j', 'k', 'J', 'K'];
 
-        $response = $this->postJson(route('play'), [
+        $response = $this->postJson(route('games'), [
             'cards' => $cards,
         ]);
 
@@ -68,56 +68,41 @@ class PlayTest extends TestCase
     {
         $cards = ['1', '2', '3', '4', '5', '6', '7', '9', '10', 'J', 'Q', 'K', 'A'];
 
-        $response = $this->postJson(route('play'), [
-            'username'  => 'jon',
-            'hand'      => $cards,
+        $response = $this->postJson(route('games'), [
+            'username'   => 'jon',
+            'cards'      => $cards,
         ]);
 
-        $response->assertStatus(200);
+        $response->assertJsonMissingValidationErrors()->assertOk();
     }
 
     /** @test */
-    public function it_should_generate_a_challenge_with_the_same_size_of_the_cards()
+    public function it_should_return_game_results()
     {
         $cards = ['5', 'K'];
 
-        $response = $this->postJson(route('play'), [
+        $response = $this->postJson(route('games'), [
             'username'   => 'jon',
             'cards'      => $cards,
         ]);
 
         $response->assertOk()->assertJson(function (AssertableJson $json) use ($cards) {
-            $json->has('challenges', 2)->etc();
-        });
-    }
-
-    /** @test */
-    public function it_should_return_play_results()
-    {
-        $cards = ['5', 'K'];
-
-        $response = $this->postJson(route('play'), [
-            'username'   => 'jon',
-            'cards'      => $cards,
-        ]);
-
-        $response->assertOk()->assertJson(function (AssertableJson $json) use ($cards) {
-            $json->has('play')
+            $json->has('results')
                  ->etc();
         });
     }
 
     /** @test */
-    public function save_the_user_play()
+    public function save_the_user_game()
     {
         $cards = ['5', 'K'];
 
-        $response = $this->postJson(route('play'), [
+        $response = $this->postJson(route('games'), [
             'username'   => 'jon',
             'cards'      => $cards,
         ]);
 
         $response->assertOk();
-        $this->assertNotNull(Play::where('username', 'jon')->first());
+        $this->assertNotNull(Game::where('username', 'jon')->first());
     }
 }
