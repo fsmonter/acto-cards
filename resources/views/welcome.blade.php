@@ -10,7 +10,8 @@
     </head>
     <body class="antialiased">
         <div id="app" class="sm:mx-auto sm:max-w-3xl">
-            <play/>
+            <play></play>
+            <leaderboard></leaderboard>
         </div>
     </body>
 </html>

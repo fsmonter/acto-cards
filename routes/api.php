@@ -2,4 +2,5 @@
 
 use App\Http\Controllers\PlayController;
 
-Route::post('play', PlayController::class)->name('play');
+Route::get('plays', [PlayController::class, 'index'])->name('plays');
+Route::post('play', [PlayController::class, 'store'])->name('plays.store');

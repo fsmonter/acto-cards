@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 class Play extends Model
 {
@@ -13,6 +14,17 @@ class Play extends Model
 
     protected $casts = [
         'challenges'    => 'array',
+    ];
+
+    const FIGURES = [
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+    ];
+
+    const SPECIAL_FIGURES = [
+        'J' => 11,
+        'Q' => 12,
+        'K' => 13,
+        'A' => 14,
     ];
 
     /**
@@ -26,28 +38,42 @@ class Play extends Model
     {
         $challenges = collect($cards)->map(function ($card) {
             return [
-                'player'     => $card,
-                'challenge'  => $randomCard = self::figures()->random(),
-                'is_winner'  => $card >= $randomCard,
+                'player_card'      => $card,
+                'challenge_card'   => $randomCard = Arr::random(self::figures()),
+                'is_winner'        => $this->cardValue($card) >= $this->cardValue($randomCard),
             ];
         });
 
-        return $this->fill([
+        $this->fill([
             'score'             => $challenges->where('is_winner', 1)->count(),
             'challenge_score'   => $challenges->where('is_winner', 0)->count(),
             'challenges'        => $challenges,
         ])->fill([
             'is_winner' => $this->score >= $this->challenge_score,
-        ]);
+        ])->save();
+
+        return $this;
     }
 
     /**
-     * Get the available figures for the play.
+     * Get the int value of a card.
      *
-     * @return illuminate\Support\Collection
+     * @param mixed $card
+     *
+     * @return int
+     */
+    public function cardValue($card)
+    {
+        return (int) Arr::get(self::SPECIAL_FIGURES, $card, $card);
+    }
+
+    /**
+     * Get all the valid figures.
+     *
+     * @return array
      */
     public static function figures()
     {
-        return collect(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']);
+        return array_merge(self::FIGURES, array_keys(self::SPECIAL_FIGURES));
     }
 }
