@@ -1,17 +1,9 @@
 <template>
-  <div class="p-5 border border-black border-solid">
-    <form>
-      <label for="username">Username</label>
-      <input type="text" name="username" v-model="form.username" />
-      <div v-if="errors.username">{{ errors.username[0] }}</div>
-
-      <label for="username"
-        >Enter a hand of cards (use a space for each card)</label
-      >
-      <input type="text" v-model="form.cards" />
-      <div v-if="errors.cards">{{ errors.cards[0] }}</div>
-
-      <button @click.prevent="play">Play!</button>
+  <div class="p-5 bg-gray-100 border">
+    <form class="flex flex-col items-center justify-center px-24">
+      <text-input class="w-full" label="Username" v-model="form.username" :errors="errors.username" />
+      <text-input class="w-full" label="Enter your hand of cards (use a space for each card)" v-model="form.cards" :errors="errors.cards" />
+      <button class="h-8 px-4 font-bold text-white bg-green-500 rounded focus:border-green-800" @click.prevent="play">Play!</button>
     </form>
     <div v-if="results">
       <div>
@@ -26,19 +18,19 @@
 </template>
 
 <script>
-import CardInput from '@/components/CardInput'
+import TextInput from '@/components/TextInput'
 export default {
   components: {
-    CardInput,
+    TextInput
   },
   data() {
     return {
       form: {
         username: '',
-        cards: '',
+        cards: ''
       },
       errors: [],
-      results: null,
+      results: null
     }
   },
   methods: {
@@ -46,18 +38,18 @@ export default {
       axios
         .post('/api/play', {
           username: this.form.username,
-          cards: this.form.cards.split(' '),
+          cards: this.form.cards.split(' ')
         })
-        .then((response) => {
+        .then(response => {
           this.results = response.data.results
           this.$root.$emit('update-leaderboard')
         })
-        .catch((error) => {
+        .catch(error => {
           if (error.response.status === 422) {
             this.errors = error.response.data.errors
           }
         })
-    },
-  },
+    }
+  }
 }
 </script>
