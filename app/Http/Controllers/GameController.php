@@ -44,7 +44,7 @@ class GameController extends Controller
                 'challengeCards'    => collect($game->challenges)->pluck('challenge_card'),
                 'score'             => $game->score,
                 'challengeScore'    => $game->challenge_score,
-                'is_winner'         => $game->is_winner,
+                'isWinner'         => $game->is_winner,
             ],
         ]);
     }

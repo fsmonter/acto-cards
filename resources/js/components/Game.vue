@@ -7,7 +7,7 @@
     </form>
     <div class="flex flex-wrap items-center mt-5 shadow" v-if="results">
       <div class="w-full p-5 bg-white border-t border-l border-r rounded-t">
-        <h2 v-text="results.is_winner ? 'Winner!' : 'Try again'" class="text-2xl text-center"></h2>
+        <h2 v-text="results.isWinner ? 'Winner!' : 'Try again'" class="text-2xl text-center"></h2>
         <p class="text-2xl font-extrabold text-center">{{ results.challengeCards.join(' ') }}</p>
       </div>
       <div class="w-1/2 p-5 border rounded-bl">
