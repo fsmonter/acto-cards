@@ -37,14 +37,14 @@ class GameController extends Controller
             }],
         ]);
 
-        $play = Game::make(['username'=> $request->username])->challenge($request->cards);
+        $game = Game::make(['username'=> $request->username])->challenge($request->cards);
 
         return response()->json([
             'results'   => [
-                'challengeCards'    => collect($play->challenges)->pluck('challenge_card'),
-                'score'             => $play->score,
-                'challengeScore'    => $play->challenge_score,
-                'is_winner'         => $play->is_winner,
+                'challengeCards'    => collect($game->challenges)->pluck('challenge_card'),
+                'score'             => $game->score,
+                'challengeScore'    => $game->challenge_score,
+                'is_winner'         => $game->is_winner,
             ],
         ]);
     }
