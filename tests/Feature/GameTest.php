@@ -55,11 +55,7 @@ class GameTest extends TestCase
         ]);
 
         $response->assertStatus(422)->assertJsonValidationErrors([
-            'cards.1',
-            'cards.2',
-            'cards.3',
-            'cards.4',
-            'cards.5',
+            'cards',
         ]);
     }
 
