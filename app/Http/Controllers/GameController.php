@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Game;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class GameController extends Controller
 {
@@ -31,8 +30,11 @@ class GameController extends Controller
     {
         $request->validate([
             'username'  => 'required|string|max:255',
-            'cards'     => 'required|array',
-            'cards.*'   => ['required', Rule::in(Game::figures())],
+            'cards'     => ['bail', 'required', function ($attribute, $cards, $fail) {
+                if (!collect($cards)->every(fn ($card) => in_array($card, Game::figures()))) {
+                    $fail('The hand of cards is invalid.');
+                }
+            }],
         ]);
 
         $play = Game::make(['username'=> $request->username])->challenge($request->cards);

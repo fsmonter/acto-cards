@@ -1,9 +1,9 @@
 <template>
   <div class="p-5 bg-gray-100 border">
     <form class="flex flex-col items-center justify-center px-24">
-      <text-input class="w-full" label="Username" v-model="form.username" :errors="errors.username" name="username"/>
+      <text-input class="w-full" label="Username" v-model="form.username" :errors="errors.username" name="username" />
       <text-input class="w-full" label="Enter your hand of cards (use a space for each card)" v-model="form.cards" :errors="errors.cards" name="cards" />
-      <button class="h-8 px-4 font-bold text-white bg-green-500 rounded focus:border-green-800" @click.prevent="play">Play!</button>
+      <button class="h-8 px-4 font-bold text-white bg-green-500 rounded focus:border-green-800" @click.prevent="play" @disabled="form.cards.length <= 0">Play!</button>
     </form>
     <div v-if="results">
       <div>

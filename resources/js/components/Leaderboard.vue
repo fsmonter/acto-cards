@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table class="min-w-full divide-y divide-gray-200" v-if="games.length > 0">
+    <table class="min-w-full border divide-y divide-gray-200" v-if="games.length > 0">
       <thead class="bg-gray-50">
         <tr>
           <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
