@@ -8,10 +8,10 @@
         <link href="{{mix('css/app.css')}}" rel="stylesheet">
         <script src="{{mix('js/app.js')}}" defer></script>
     </head>
-    <body class="antialiased">
-        <div id="app" class="sm:mx-auto sm:max-w-3xl">
-            <game/></game>
-            <leaderboard></leaderboard>
+    <body class="antialiased bg-gray-100">
+        <div id="app" class="flex flex-col justify-center h-screen sm:mx-auto sm:max-w-3xl">
+            <game class="w-full"/></game>
+            <leaderboard class="w-full"></leaderboard>
         </div>
     </body>
 </html>

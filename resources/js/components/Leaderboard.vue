@@ -48,7 +48,7 @@ export default {
     }
   },
   mounted() {
-    this.fetchGames()
+    // this.fetchGames()
     this.$root.$on('update-leaderboard', () => {
       this.fetchGames()
     })
